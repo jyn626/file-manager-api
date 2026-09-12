@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestj
 import { db } from 'src/db';
 import { eq } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
+import Fs from 'node:fs/promises'
 
 @Injectable()
 export class FilesService {
@@ -58,11 +59,18 @@ export class FilesService {
     name: string,
     path: string
   ) {
-    const file: typeof files.$inferInsert = {
-      name,
-      path
-    };
-    return await db.insert(files).values(file);
+    try {
+      const file: typeof files.$inferInsert = {
+        name,
+        path
+      };
+      return await db.insert(files).values(file);
+    } catch (error) {
+      // TODO: when the db failed, delete the file in the disk
+      await Fs.rm(path, { force: true });
+
+      throw error;
+    }
   }
 
   async delete(id: number) {

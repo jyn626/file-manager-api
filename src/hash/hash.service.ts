@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import crypto from 'crypto'
 import fs from 'fs'
-import { pipeline } from 'stream';
 import { db } from 'src/db';
 import { eq } from 'drizzle-orm';
 import { files } from 'src/db/schema';
