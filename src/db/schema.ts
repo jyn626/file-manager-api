@@ -4,7 +4,8 @@ export const files = sqliteTable("Files", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   path: text("path").notNull().unique(),
-  sha: text("sha").unique()
+  sha: text("sha").unique(),
+  category: text("category", { enum: ['Document', 'Image', 'Video', 'Audio', 'Others'] }).notNull()
 })
 
 export const fileMetadatas = sqliteTable("FileMetadatas", {

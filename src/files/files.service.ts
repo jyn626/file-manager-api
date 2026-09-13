@@ -62,7 +62,8 @@ export class FilesService {
     try {
       const file: typeof files.$inferInsert = {
         name,
-        path
+        path,
+        category: 'Others'
       };
       const storedFile = await db.insert(files).values(file);
       return storedFile[0].id;
