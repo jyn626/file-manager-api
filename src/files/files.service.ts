@@ -64,7 +64,8 @@ export class FilesService {
         name,
         path
       };
-      return await db.insert(files).values(file);
+      const storedFile = await db.insert(files).values(file);
+      return storedFile[0].id;
     } catch (error) {
       // TODO: when the db failed, delete the file in the disk
       await Fs.rm(path, { force: true });
@@ -76,8 +77,11 @@ export class FilesService {
   async delete(id: number) {
     // this.findOne(id); // check if the file exists first
     // return this.files.filter((file) => file.id !== id);
-
     return await db.delete(files).where(eq(files.id, id));
+  }
+
+  async deleteFromDisks(path: string) {
+    return await Fs.rm(path, { force: true });
   }
 
   async saveHash(id: number, hash: string) {

@@ -8,7 +8,7 @@ import { files } from 'src/db/schema';
 @Injectable()
 export class HashService {
 
-  getSHA256(filepath: string) {
+  getSHA256(filepath: string): Promise<string> {
     return new Promise((resolve, reject) => {
       console.log(filepath)
       // create readable filestream
