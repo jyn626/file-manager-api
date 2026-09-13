@@ -154,4 +154,10 @@ export class FilesController {
       hash,
     };
   }
+
+  // DELETE /files/clear
+  @Delete('/clear')
+  async clear() {
+    return this.fileService.clear();
+  }
 }

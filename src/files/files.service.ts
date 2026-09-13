@@ -88,4 +88,10 @@ export class FilesService {
   async saveHash(id: number, hash: string) {
     return await db.update(files).set({ sha: hash }).where(eq(files.id, id))
   }
+
+  async clear() {
+    // TODO: add authorization (?)
+    // clear all the file records in the database
+    return await db.delete(files);
+  }
 }
