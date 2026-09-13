@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { db } from 'src/db';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
 import Fs from 'node:fs/promises'
 
@@ -90,8 +90,14 @@ export class FilesService {
   }
 
   async clear() {
-    // TODO: add authorization (?)
-    // clear all the file records in the database
-    return await db.delete(files);
+    try {
+      // TODO: add authorization (?)
+      // clear all the file records in the database
+      return await db.delete(files);
+      // return await db.execute(sql`TRUNCATE TABLE files CASCADE`);
+    } catch (error) {
+      console.log(error)
+      throw error;
+    }
   }
 }

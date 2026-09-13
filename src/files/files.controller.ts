@@ -128,6 +128,12 @@ export class FilesController {
     }
   }
 
+  // DELETE /files/clear
+  @Delete('/clear')
+  async clear() {
+    return await this.fileService.clear();
+  }
+
   // DELETE /files/:id
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
@@ -153,11 +159,5 @@ export class FilesController {
       message: 'Hash successfull.',
       hash,
     };
-  }
-
-  // DELETE /files/clear
-  @Delete('/clear')
-  async clear() {
-    return await this.fileService.clear();
   }
 }
