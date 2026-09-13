@@ -93,6 +93,8 @@ export class FilesController {
           throw new HttpException('Hashing failed.', HttpStatus.BAD_REQUEST)
         })
 
+      // save the hash
+      await this.fileService.saveHash(fileId, newFileHash);
       const exists = await this.hashService.getDuplicates(newFileHash);
       console.log('-- exists: ', exists.length);
 

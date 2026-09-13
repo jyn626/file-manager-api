@@ -3,6 +3,7 @@ import { db } from 'src/db';
 import { eq, sql } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
 import Fs from 'node:fs/promises'
+import path from 'node:path';
 
 @Injectable()
 export class FilesService {
@@ -93,8 +94,26 @@ export class FilesService {
     try {
       // TODO: add authorization (?)
       // clear all the file records in the database
-      return await db.delete(files);
-      // return await db.execute(sql`TRUNCATE TABLE files CASCADE`);
+      // await Fs.rmdir('./uploads', { recursive: true }); // this removes the whole folder and its contents
+
+      const files = await Fs.readdir('./uploads');
+      // const deletePromises = files.map((file) => {
+      //   const fpath = path.join('./uploads', file);
+
+      //   return Fs.unlink(fpath); // unlink -- removes a file from the file system
+      // })
+
+      // Promise.all(deletePromises);
+      return await Promise.all(
+        files.map((file) => {
+          const fpath = path.join('./uploads', file);
+
+          return Fs.unlink(fpath); // unlink -- removes a file from the file system
+        })
+      )
+      // execute multiple promises in parralell, and wait for them to succeed before proceeding
+      // return await db.delete(files);
+      // return await db.e  xecute(sql`TRUNCATE TABLE files CASCADE`);
     } catch (error) {
       console.log(error)
       throw error;
