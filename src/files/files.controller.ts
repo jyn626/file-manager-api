@@ -96,10 +96,12 @@ export class FilesController {
       // save the hash
       await this.fileService.saveHash(fileId, newFileHash);
       const exists = await this.hashService.getDuplicates(newFileHash);
-      console.log('-- exists: ', exists.length);
 
+      console.log('-- exists: ', exists.length);
+      console.log(exists)
       // reject duplicates
       if (exists.length > 0) {
+        const existedFile = exists[0];
         // delete file from disk
         // await Fs.rm(file.path, { force: true });
         await this.fileService.deleteFromDisks(file.path);

@@ -104,6 +104,7 @@ export class FilesService {
       // })
 
       // Promise.all(deletePromises);
+      // Promise.all -> execute multiple promises in parallel, and wait for all of them to succeed before proceeding
       return await Promise.all(
         files.map((file) => {
           const fpath = path.join('./uploads', file);
@@ -111,7 +112,6 @@ export class FilesService {
           return Fs.unlink(fpath); // unlink -- removes a file from the file system
         })
       )
-      // execute multiple promises in parralell, and wait for them to succeed before proceeding
       // return await db.delete(files);
       // return await db.e  xecute(sql`TRUNCATE TABLE files CASCADE`);
     } catch (error) {

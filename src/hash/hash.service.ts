@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import crypto from 'crypto'
 import fs from 'fs'
 import { db } from 'src/db';
@@ -32,6 +32,20 @@ export class HashService {
   }
 
   async getDuplicates(hash: string) {
-    return await db.select().from(files).where(eq(files.sha, hash))
+    const _files = await db.select().from(files).where(eq(files.sha, hash));
+
+    // for every duplicates (which is usually just 1), check if they still exists in the folder
+    // if not, then send an error.
+    // TODO: refactor
+    await Promise.all(
+      _files.map((file) => {
+        if (!fs.existsSync(file.path)) {
+          throw new HttpException('There was a problem in finding stored duplicates.', HttpStatus.BAD_REQUEST)
+        }
+      })
+    )
+
+    return _files;
+    // return await db.select().from(files).where(eq(files.sha, hash))
   }
 }
