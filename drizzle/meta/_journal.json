@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1788678608565,
-      "tag": "0000_woozy_impossible_man",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1788687100914,
-      "tag": "0001_last_aqueduct",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1788952084477,
-      "tag": "0002_opposite_peter_quill",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1789274433533,
-      "tag": "0003_equal_sabra",
+      "when": 1789274896684,
+      "tag": "0000_pretty_golden_guardian",
       "breakpoints": true
     }
   ]

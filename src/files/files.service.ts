@@ -65,8 +65,8 @@ export class FilesService {
         path,
         category: 'Others'
       };
-      const storedFile = await db.insert(files).values(file);
-      return storedFile[0].id;
+      const [storedFile] = await db.insert(files).values(file).returning();
+      return storedFile.id;
     } catch (error) {
       // TODO: when the db failed, delete the file in the disk
       await Fs.rm(path, { force: true });

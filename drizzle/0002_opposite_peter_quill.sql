@@ -1,1 +1,0 @@
-ALTER TABLE `Files` ADD `sha` text;

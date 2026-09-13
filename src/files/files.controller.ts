@@ -158,6 +158,6 @@ export class FilesController {
   // DELETE /files/clear
   @Delete('/clear')
   async clear() {
-    return this.fileService.clear();
+    return await this.fileService.clear();
   }
 }

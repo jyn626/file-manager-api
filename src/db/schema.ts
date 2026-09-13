@@ -5,7 +5,7 @@ export const files = sqliteTable("Files", {
   name: text("name").notNull(),
   path: text("path").notNull().unique(),
   sha: text("sha").unique(),
-  category: text("category", { enum: ["Document", "Image", "Video", "Audio", "Others"] }).notNull()
+  category: text("category", { enum: ["Document", "Image", "Video", "Audio", "Others"] }).default("Others")
 })
 
 export const fileMetadatas = sqliteTable("FileMetadatas", {
