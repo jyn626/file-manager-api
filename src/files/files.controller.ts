@@ -19,15 +19,16 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { HashService } from 'src/hash/hash.service';
-import Fs, { access, constants } from 'node:fs/promises'
-import { DrizzleError } from 'drizzle-orm';
+import { access, constants } from 'node:fs/promises'
+import { CategorizeService } from 'src/categorize/categorize.service';
 
 @Controller('files')
 export class FilesController {
   constructor(
     private fileService: FilesService,
     private fileMetadataService: FileMetadataService,
-    private hashService: HashService
+    private hashService: HashService,
+    private categoryService: CategorizeService
   ) { }
 
   @Get('/test')
@@ -111,6 +112,9 @@ export class FilesController {
       // save the hash
       await this.fileService.saveHash(fileId, newFileHash);
 
+      // get category
+      const category = await this.categoryService.getCategory(file.path);
+      console.log('file category -- ' + category)
       // if theyre arent duplicates then store the file.
       return {
         message: 'Upload successfull.',
