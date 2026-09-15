@@ -1,6 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { constants, access } from 'node:fs/promises';
 import mime from 'mime-types'
+import { db } from 'src/db';
+import { files } from 'src/db/schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class CategorizeService {
@@ -35,5 +38,10 @@ export class CategorizeService {
         throw new HttpException('File not found.', HttpStatus.NOT_FOUND);
       }
     }
+  }
+
+  async store(id, filepath: string) {
+    const category = await this.getCategory(filepath);
+    return await db.update(files).set({ category }).where(eq(files.id, id))
   }
 }

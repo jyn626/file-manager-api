@@ -112,9 +112,10 @@ export class FilesController {
       // save the hash
       await this.fileService.saveHash(fileId, newFileHash);
 
-      // get category
-      const category = await this.categoryService.getCategory(file.path);
+      // get and save category
+      const category = await this.categoryService.store(fileId, file.path);
       console.log('file category -- ' + category)
+
       // if theyre arent duplicates then store the file.
       return {
         message: 'Upload successfull.',
