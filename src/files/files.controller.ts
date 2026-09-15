@@ -21,6 +21,7 @@ import { extname } from 'path';
 import { HashService } from 'src/hash/hash.service';
 import { access, constants } from 'node:fs/promises'
 import { CategorizeService } from 'src/categorize/categorize.service';
+import { CategoryOverrideDto } from './dtos/category-override.dto';
 
 @Controller('files')
 export class FilesController {
@@ -168,5 +169,15 @@ export class FilesController {
       message: 'Hash successfull.',
       hash,
     };
+  }
+
+  // POST /files/:id/category/override
+  // override category
+  @Post(':id/category/override')
+  async categoryOverride(
+    @Body() categoryOverrideDto: CategoryOverrideDto,
+    @Param('id') id: number) {
+    console.log(categoryOverrideDto)
+    return await this.categoryService.update(id, categoryOverrideDto.category);
   }
 }

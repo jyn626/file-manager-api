@@ -44,4 +44,8 @@ export class CategorizeService {
     const category = await this.getCategory(filepath);
     return await db.update(files).set({ category }).where(eq(files.id, id))
   }
+
+  async update(id, category) {
+    return await db.update(files).set({ category }).where(eq(files.id, id))
+  }
 }
