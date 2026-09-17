@@ -3,6 +3,7 @@ import { db } from 'src/db';
 import { eq, sql } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
 import Fs from 'node:fs/promises'
+import { GetFilesQueryDto } from './dtos/get-files-query.dto';
 import path from 'node:path';
 
 @Injectable()
@@ -14,16 +15,23 @@ export class FilesService {
   //   { id: 4, name: "fIeYumGSYp4MQlIlU.gif", path: "test-files/fIeYumGSYp4MQlIlU.gif" }
   // ]
 
-  async findAll(limit?: number, offset?: number) {
+  async findAll(queries: GetFilesQueryDto) {
     // with simple pagination
     // return (
     //   limit && limit > 0 &&
     //   offset && offset > 0) ?
     //   this.files.slice(offset, limit) : this.files;
 
+    if (queries.filename) {
+      return await this.findByFilename(queries.filename)
+    }
+
+    // ! TODO: add filtering for min size and max size
     return await db.query.files.findMany({
-      offset,
-      limit
+      where:
+        (queries.category ? eq(files.category, queries.category) : undefined),
+      offset: queries.offset,
+      limit: queries.limit,
     })
   }
 

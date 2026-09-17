@@ -1,7 +1,7 @@
 // TODO: add validation `class-validator`
 export class GetFilesQueryDto {
   filename?: string;
-  category?: string;
+  category?: 'Document' | 'Image' | 'Video' | 'Audio' | 'Others';
   minSize?: number;
   maxSize?: number;
   sortBy?: string;

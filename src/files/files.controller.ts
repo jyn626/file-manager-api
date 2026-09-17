@@ -40,9 +40,7 @@ export class FilesController {
 
   // GET /files
   @Get()
-  async findAll(
-    @Query() queries: GetFilesQueryDto
-  ) {
+  async findAll(@Query() queries: GetFilesQueryDto) {
     return await this.fileService.findAll(queries);
   }
 
