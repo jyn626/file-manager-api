@@ -47,6 +47,18 @@ export class FilesService {
     return matched;
   }
 
+  async findByFilename(filename: string) {
+    return await db.query.files.findFirst({
+      where: eq(files.name, filename)
+    });
+  }
+
+  async findByCategory(category: 'Document' | 'Image' | 'Video' | 'Audio' | 'Others') {
+    return await db.query.files.findMany({
+      where: eq(files.category, category)
+    })
+  }
+
   async findByExtension(extension: string) {
     return await db.query.fileMetadatas.findMany({
       with: {

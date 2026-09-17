@@ -22,6 +22,7 @@ import { HashService } from 'src/hash/hash.service';
 import { access, constants } from 'node:fs/promises'
 import { CategorizeService } from 'src/categorize/categorize.service';
 import { CategoryOverrideDto } from './dtos/category-override.dto';
+import { GetFilesQueryDto } from './dtos/get-files-query.dto';
 
 @Controller('files')
 export class FilesController {
@@ -40,10 +41,9 @@ export class FilesController {
   // GET /files
   @Get()
   async findAll(
-    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
-    @Query('offset', new ParseIntPipe({ optional: true })) offset?: number) {
-
-    return await this.fileService.findAll(limit, offset);
+    @Query() queries: GetFilesQueryDto
+  ) {
+    return await this.fileService.findAll(queries);
   }
 
   // GET /files/:id
@@ -54,7 +54,7 @@ export class FilesController {
 
   // GET /files/:extension
   @Get(':extension')
-  findByExtension(@Param("extension") extension: string) {
+  findByExtension(@Param("extension") _extension: string) {
   }
 
 
@@ -64,7 +64,7 @@ export class FilesController {
       storage: diskStorage({
         destination: './uploads',
 
-        filename: (req, file, cb) => {
+        filename: (_req, file, cb) => {
           const extension = extname(file.originalname);
           const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extension}`;
 
