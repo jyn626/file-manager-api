@@ -69,11 +69,13 @@ export class FilesService {
       .$dynamic();
 
     // TODO: discover other solutions for implementing pagination
-    if (queries.limit !== undefined) {
+    // OFFSET BASED-PAGINATION.
+    // TODO : maybe learn PAGE-BASED later and implement it ✌️.
+    if (queries.limit !== undefined && queries.limit < 20) {
       query = query.limit(queries.limit);
     }
 
-    if (queries.offset !== undefined) {
+    if (queries.offset !== undefined && queries.limit && queries.limit < 20) {
       query = query.offset(queries.offset);
     }
 
