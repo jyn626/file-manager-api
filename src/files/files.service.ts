@@ -1,11 +1,6 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { db } from 'src/db';
-import { desc, eq, sql } from 'drizzle-orm';
+import { and, eq, SQL } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
 import Fs from 'node:fs/promises';
 import { GetFilesQueryDto } from './dtos/get-files-query.dto';
@@ -31,11 +26,22 @@ export class FilesService {
       return await this.findByFilename(queries.filename);
     }
 
+    // we need to type it explicitly because if not
+    // typescript will interpret it as `never[]` which means
+    // this array wouldnt contain anything.
+    const conditions: SQL[] = [];
+
+    if (queries.category) {
+      conditions.push(eq(files.category, queries.category));
+    }
+
+    if (queries.extension) {
+      conditions.push(eq(files.extension, queries.extension));
+    }
+
     // ! TODO: add filtering for min size and max size
     return await db.query.files.findMany({
-      where: queries.category
-        ? eq(files.category, queries.category)
-        : undefined,
+      where: conditions.length > 0 ? and(...conditions) : undefined,
       offset: queries.offset,
       limit: queries.limit,
     });
