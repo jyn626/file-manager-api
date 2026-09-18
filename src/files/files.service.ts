@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { db } from 'src/db';
-import { and, eq, SQL } from 'drizzle-orm';
+import { and, eq, gt, SQL } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
 import Fs from 'node:fs/promises';
 import { GetFilesQueryDto } from './dtos/get-files-query.dto';
@@ -40,6 +40,14 @@ export class FilesService {
     }
 
     // ! TODO: add filtering for min size and max size
+    // if (queries.minSize) {
+    //   conditions.push(gt(fileMetadatas.size, String(queries.minSize)));
+    // }
+
+    // if (queries.maxSize) {
+    //   conditions.push(gt(files.size, queries.minSize));
+    // }
+
     return await db.query.files.findMany({
       where: conditions.length > 0 ? and(...conditions) : undefined,
       offset: queries.offset,
@@ -100,6 +108,7 @@ export class FilesService {
         category: 'Others',
       };
       const [storedFile] = await db.insert(files).values(file).returning();
+
       return storedFile.id;
     } catch (error) {
       // TODO: when the db failed, delete the file in the disk

@@ -119,6 +119,8 @@ export class FilesController {
       const category = await this.categoryService.store(fileId, file.path);
       console.log('file category --', category);
 
+      // get and save metadata
+      await this.fileMetadataService.saveMetadata(null, file.path);
       // if theyre arent duplicates then store the file.
       return {
         message: 'Upload successfull.',

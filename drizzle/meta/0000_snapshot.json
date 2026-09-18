@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "faf36726-0a22-4aac-9df7-ec9e520a0086",
+  "id": "62172335-2946-4828-9be1-5d2a4d2c577d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "FileMetadatas": {
@@ -30,7 +30,7 @@
         },
         "size": {
           "name": "size",
-          "type": "text",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

@@ -2,7 +2,7 @@ CREATE TABLE `FileMetadatas` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`filename` text NOT NULL,
 	`extension` text NOT NULL,
-	`size` text NOT NULL,
+	`size` integer NOT NULL,
 	`creationTime` text NOT NULL,
 	`mime` text NOT NULL
 );

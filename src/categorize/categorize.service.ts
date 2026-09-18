@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { constants, access } from 'node:fs/promises';
-import mime from 'mime-types'
+import mime from 'mime-types';
 import { db } from 'src/db';
 import { files } from 'src/db/schema';
 import { eq } from 'drizzle-orm';
@@ -26,11 +26,13 @@ export class CategorizeService {
   // maps extension/MIME to a category
   async getCategory(filepath: string) {
     try {
-      await access(filepath, constants.F_OK) // test if the file exists (will throw an error if not) 
+      await access(filepath, constants.F_OK); // test if the file exists (will throw an error if not)
       const MIME = mime.lookup(filepath); // get MIME type
 
       let category = this.map[MIME]; // get the category base on the Map
-      if (!category) { category = "Others" } // if it doesnt exists, then js set it as Others
+      if (!category) {
+        category = 'Others';
+      } // if it doesnt exists, then js set it as Others
 
       return category;
     } catch (error: any) {
@@ -42,10 +44,10 @@ export class CategorizeService {
 
   async store(id, filepath: string) {
     const category = await this.getCategory(filepath);
-    return await db.update(files).set({ category }).where(eq(files.id, id))
+    return await db.update(files).set({ category }).where(eq(files.id, id));
   }
 
   async update(id, category) {
-    return await db.update(files).set({ category }).where(eq(files.id, id))
+    return await db.update(files).set({ category }).where(eq(files.id, id));
   }
 }
