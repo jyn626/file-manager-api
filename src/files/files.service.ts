@@ -40,22 +40,31 @@ export class FilesService {
     }
 
     // ! TODO: add filtering for min size and max size
-    // if (queries.minSize) {
-    //   conditions.push(gt(fileMetadatas.size, String(queries.minSize)));
-    // }
+    if (queries.minSize) {
+      conditions.push(gt(fileMetadatas.size, Number(queries.minSize)));
+    }
 
-    // if (queries.maxSize) {
-    //   conditions.push(gt(files.size, queries.minSize));
-    // }
+    if (queries.maxSize) {
+      conditions.push(gt(fileMetadatas.size, Number(queries.minSize)));
+    }
 
-    return await db.query.files.findMany({
-      where: conditions.length > 0 ? and(...conditions) : undefined,
-      offset: queries.offset,
-      limit: queries.limit,
-      with: {
-        fileMetadatas: true,
-      },
-    });
+    // return await db.query.files.findMany({
+    //   where: conditions.length > 0 ? and(...conditions) : undefined,
+    //   offset: queries.offset,
+    //   limit: queries.limit,
+    //   with: {
+    //     fileMetadatas: true,
+    //   },
+    // });
+
+    return await db
+      .select({
+        file: files,
+        metadata: fileMetadatas,
+      })
+      .from(files)
+      .leftJoin(fileMetadatas, eq(files.id, fileMetadatas.fileId))
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
   }
 
   async findOne(id: number) {
