@@ -57,7 +57,7 @@ export class FilesService {
     //   },
     // });
 
-    return await db
+    let query = db
       .select({
         file: files,
         metadata: fileMetadatas,
@@ -65,7 +65,19 @@ export class FilesService {
       .from(files)
       .leftJoin(fileMetadatas, eq(files.id, fileMetadatas.fileId))
       .where(conditions.length > 0 ? and(...conditions) : undefined)
-      .orderBy(desc(fileMetadatas.creationTime), desc(fileMetadatas.size)); // from newest to lowest
+      .orderBy(desc(fileMetadatas.creationTime), desc(fileMetadatas.size))
+      .$dynamic();
+
+    // TODO: discover other solutions for implementing pagination
+    if (queries.limit !== undefined) {
+      query = query.limit(queries.limit);
+    }
+
+    if (queries.offset !== undefined) {
+      query = query.offset(queries.offset);
+    }
+
+    return await query; // from newest to lowest
   }
 
   async findOne(id: number) {
