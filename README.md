@@ -2,13 +2,16 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
 
-# Personal File Processing & Organization API
+> [!WARNING]
+> Development in progress...
+
+# File Processing API
 
 > A simple NestJS backend API for uploading, processing, and organizing files with background jobs and PostgreSQL.
 
 ---
 
-## Architecture Overview
+## Architecture Overview (not fully implemented yet)
 
 ```
 Client ──> NestJS API (Auth / Routes) ──> PostgreSQL (Data & Users)
