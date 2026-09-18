@@ -25,7 +25,7 @@ Client ──> NestJS API (Auth / Routes) ──> PostgreSQL (Data & Users)
 ## Tech Stack
 
 * **Framework:** NestJS (TypeScript)
-* **Database & ORM:** PostgreSQL + Drizzle
+* **Database & ORM:** PostgreSQL (temporarily SQLite) + Drizzle
 * **Queue & Cache:** BullMQ + Redis
 * **Auth:** Passport.js + JWT
 
