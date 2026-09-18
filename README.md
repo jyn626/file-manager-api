@@ -22,15 +22,15 @@ Client ──> NestJS API (Auth / Routes) ──> PostgreSQL (Data & Users)
 ## Tech Stack
 
 * **Framework:** NestJS (TypeScript)
-* **Database & ORM:** PostgreSQL + Prisma
+* **Database & ORM:** PostgreSQL + Drizzle
 * **Queue & Cache:** BullMQ + Redis
 * **Auth:** Passport.js + JWT
 
 ---
 
 ## Quickstart
-
-1. **Clone & install:**
+<i>Coming soon...</i>
+<!--1. **Clone & install:**
 ```bash
 git clone https://github.com/your-username/file-processing-api.git
 cd file-processing-api
@@ -48,17 +48,18 @@ docker compose up -d postgres redis
 
 3. **Run migrations & start server:**
 ```bash
-pnpm prisma migrate dev
+pnpm Drizzle migrate dev
 pnpm start:dev
 
 ```
 
-
+-->
 
 ---
 
 ## API Routes
-
+<i>Coming soon...</i>
+<!--
 | Method | Endpoint | Description | Auth |
 | --- | --- | --- | --- |
 | `POST` | `/auth/register` | Register user | No |
@@ -67,7 +68,7 @@ pnpm start:dev
 | `GET` | `/files` | List/search files | Yes |
 | `POST` | `/files/:id/process` | Trigger hashing & analysis | Yes |
 | `GET` | `/jobs/:id` | Check processing status | Yes |
-
+-->
 ---
 
 ## Roadmap
@@ -75,7 +76,7 @@ pnpm start:dev
 * [ ] **Phase 1: Setup** — Project creation & basic `/health` route
 * [ ] **Phase 2: Controllers & Services** — In-memory files CRUD & DTO validation
 * [ ] **Phase 3: Metadata** — File size, MIME, and path extraction service
-* [ ] **Phase 4: Database** — PostgreSQL & Prisma setup with real CRUD
+* [ ] **Phase 4: Database** — PostgreSQL & Drizzle setup with real CRUD
 * [ ] **Phase 5: Uploads** — Multer disk storage integration & validation
 * [ ] **Phase 6: Hashing** — SHA-256 streaming & duplicate detection
 * [ ] **Phase 7: Categories** — Domain rules for file classification
