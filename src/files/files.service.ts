@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { db } from 'src/db';
-import { and, eq, gt, SQL } from 'drizzle-orm';
+import { and, desc, eq, gt, SQL } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
 import Fs from 'node:fs/promises';
 import { GetFilesQueryDto } from './dtos/get-files-query.dto';
@@ -65,6 +65,7 @@ export class FilesService {
       .from(files)
       .leftJoin(fileMetadatas, eq(files.id, fileMetadatas.fileId))
       .where(conditions.length > 0 ? and(...conditions) : undefined)
+      .orderBy(desc(fileMetadatas.creationTime), desc(fileMetadatas.size)); // from newest to lowest
   }
 
   async findOne(id: number) {
