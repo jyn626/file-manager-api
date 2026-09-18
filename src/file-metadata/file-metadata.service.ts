@@ -45,10 +45,11 @@ export class FileMetadataService {
     }
   }
 
-  async saveMetadata(metadata: MetadataCreateDto | null, filepath?: string) {
-    if (!metadata && filepath) {
-      metadata = this.read(filepath);
-    }
-    return await db.insert(fileMetadatas).values(metadata!);
+  async saveMetadata(filepath: string, fileId: number) {
+    const metadata: MetadataCreateDto = this.read(filepath);
+    return await db.insert(fileMetadatas).values({
+      ...metadata,
+      fileId,
+    });
   }
 }

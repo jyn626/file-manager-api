@@ -52,6 +52,9 @@ export class FilesService {
       where: conditions.length > 0 ? and(...conditions) : undefined,
       offset: queries.offset,
       limit: queries.limit,
+      with: {
+        fileMetadatas: true,
+      },
     });
   }
 

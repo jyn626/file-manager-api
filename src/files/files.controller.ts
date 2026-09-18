@@ -120,7 +120,7 @@ export class FilesController {
       console.log('file category --', category);
 
       // get and save metadata
-      await this.fileMetadataService.saveMetadata(null, file.path);
+      await this.fileMetadataService.saveMetadata(file.path, fileId);
       // if theyre arent duplicates then store the file.
       return {
         message: 'Upload successfull.',

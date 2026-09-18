@@ -1,4 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { relations } from 'drizzle-orm';
 
 export const files = sqliteTable('Files', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -18,4 +19,15 @@ export const fileMetadatas = sqliteTable('FileMetadatas', {
   size: integer('size').notNull(),
   creationTime: text('creationTime').notNull(),
   mime: text('mime').notNull(),
+  fileId: integer('fileId')
+    .notNull()
+    .references(() => files.id)
+    .unique(),
 });
+
+export const filesRelations = relations(files, ({ one }) => ({
+  fileMetadatas: one(fileMetadatas, {
+    fields: [files.id],
+    references: [fileMetadatas.fileId],
+  }),
+}));

@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "62172335-2946-4828-9be1-5d2a4d2c577d",
+  "id": "661499a3-c204-4531-8554-04b55a5dc930",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "FileMetadatas": {
@@ -48,10 +48,39 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "fileId": {
+          "name": "fileId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "FileMetadatas_fileId_unique": {
+          "name": "FileMetadatas_fileId_unique",
+          "columns": [
+            "fileId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "FileMetadatas_fileId_Files_id_fk": {
+          "name": "FileMetadatas_fileId_Files_id_fk",
+          "tableFrom": "FileMetadatas",
+          "tableTo": "Files",
+          "columnsFrom": [
+            "fileId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}
