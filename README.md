@@ -76,13 +76,13 @@ pnpm start:dev
 
 ## Roadmap
 
-* [ ] **Phase 1: Setup** — Project creation & basic `/health` route
-* [ ] **Phase 2: Controllers & Services** — In-memory files CRUD & DTO validation
-* [ ] **Phase 3: Metadata** — File size, MIME, and path extraction service
-* [ ] **Phase 4: Database** — PostgreSQL & Drizzle setup with real CRUD
-* [ ] **Phase 5: Uploads** — Multer disk storage integration & validation
-* [ ] **Phase 6: Hashing** — SHA-256 streaming & duplicate detection
-* [ ] **Phase 7: Categories** — Domain rules for file classification
+* [X] **Phase 1: Setup** — Project creation & basic `/health` route
+* [X] **Phase 2: Controllers & Services** — In-memory files CRUD & DTO validation
+* [X] **Phase 3: Metadata** — File size, MIME, and path extraction service
+* [X] **Phase 4: Database** — PostgreSQL & Drizzle setup with real CRUD
+* [X] **Phase 5: Uploads** — Multer disk storage integration & validation
+* [X] **Phase 6: Hashing** — SHA-256 streaming & duplicate detection
+* [X] **Phase 7: Categories** — Domain rules for file classification
 * [ ] **Phase 8: Search & Filter** — Pagination, sorting, and search params
 * [ ] **Phase 9: Auth** — JWT authentication & resource ownership
 * [ ] **Phase 10: Pipes & Guards** — Global filters, custom decorators, ownership guards
