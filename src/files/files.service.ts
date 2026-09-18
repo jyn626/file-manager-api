@@ -1,8 +1,13 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { db } from 'src/db';
-import { eq, sql } from 'drizzle-orm';
+import { desc, eq, sql } from 'drizzle-orm';
 import { fileMetadatas, files } from 'src/db/schema';
-import Fs from 'node:fs/promises'
+import Fs from 'node:fs/promises';
 import { GetFilesQueryDto } from './dtos/get-files-query.dto';
 import path from 'node:path';
 
@@ -23,16 +28,17 @@ export class FilesService {
     //   this.files.slice(offset, limit) : this.files;
 
     if (queries.filename) {
-      return await this.findByFilename(queries.filename)
+      return await this.findByFilename(queries.filename);
     }
 
     // ! TODO: add filtering for min size and max size
     return await db.query.files.findMany({
-      where:
-        (queries.category ? eq(files.category, queries.category) : undefined),
+      where: queries.category
+        ? eq(files.category, queries.category)
+        : undefined,
       offset: queries.offset,
       limit: queries.limit,
-    })
+    });
   }
 
   async findOne(id: number) {
@@ -45,7 +51,7 @@ export class FilesService {
 
     // return matched;
     const matched = await db.query.files.findFirst({
-      where: eq(files.id, id)
+      where: eq(files.id, id),
     });
 
     if (!matched) {
@@ -57,40 +63,41 @@ export class FilesService {
 
   async findByFilename(filename: string) {
     return await db.query.files.findFirst({
-      where: eq(files.name, filename)
+      where: eq(files.name, filename),
     });
   }
 
-  async findByCategory(category: 'Document' | 'Image' | 'Video' | 'Audio' | 'Others') {
+  async findByCategory(
+    category: 'Document' | 'Image' | 'Video' | 'Audio' | 'Others',
+  ) {
     return await db.query.files.findMany({
-      where: eq(files.category, category)
-    })
+      where: eq(files.category, category),
+    });
   }
 
   async findByExtension(extension: string) {
     return await db.query.fileMetadatas.findMany({
       with: {
-        files: true
+        files: true,
       },
-      where: eq(fileMetadatas.extension, extension)
-    })
+      where: eq(fileMetadatas.extension, extension),
+    });
   }
 
-  async upload(
-    name: string,
-    path: string
-  ) {
+  async upload(name: string, fpath: string) {
     try {
+      const ext = path.extname(name);
       const file: typeof files.$inferInsert = {
         name,
-        path,
-        category: 'Others'
+        path: fpath,
+        extension: ext,
+        category: 'Others',
       };
       const [storedFile] = await db.insert(files).values(file).returning();
       return storedFile.id;
     } catch (error) {
       // TODO: when the db failed, delete the file in the disk
-      await Fs.rm(path, { force: true });
+      await Fs.rm(fpath, { force: true });
 
       throw error;
     }
@@ -107,7 +114,7 @@ export class FilesService {
   }
 
   async saveHash(id: number, hash: string) {
-    return await db.update(files).set({ sha: hash }).where(eq(files.id, id))
+    return await db.update(files).set({ sha: hash }).where(eq(files.id, id));
   }
 
   async clear() {
@@ -130,12 +137,12 @@ export class FilesService {
           const fpath = path.join('./uploads', file);
 
           return Fs.unlink(fpath); // unlink -- removes a file from the file system
-        })
-      )
+        }),
+      );
       // return await db.delete(files);
       // return await db.e  xecute(sql`TRUNCATE TABLE files CASCADE`);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       throw error;
     }
   }

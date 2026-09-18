@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "61b0619a-d54d-4801-8aff-34eddc3d8c3d",
+  "id": "faf36726-0a22-4aac-9df7-ec9e520a0086",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "FileMetadatas": {
@@ -82,6 +82,13 @@
         },
         "sha": {
           "name": "sha",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "extension": {
+          "name": "extension",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

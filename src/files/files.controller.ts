@@ -11,7 +11,7 @@ import {
   HttpStatus,
   UseInterceptors,
   UploadedFile,
-  HttpException
+  HttpException,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileMetadataService } from 'src/file-metadata/file-metadata.service';
@@ -19,7 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { HashService } from 'src/hash/hash.service';
-import { access, constants } from 'node:fs/promises'
+import { access, constants } from 'node:fs/promises';
 import { CategorizeService } from 'src/categorize/categorize.service';
 import { CategoryOverrideDto } from './dtos/category-override.dto';
 import { GetFilesQueryDto } from './dtos/get-files-query.dto';
@@ -30,12 +30,12 @@ export class FilesController {
     private fileService: FilesService,
     private fileMetadataService: FileMetadataService,
     private hashService: HashService,
-    private categoryService: CategorizeService
+    private categoryService: CategorizeService,
   ) { }
 
   @Get('/test')
   test() {
-    return 'hello'
+    return 'hello';
   }
 
   // GET /files
@@ -52,13 +52,12 @@ export class FilesController {
 
   // GET /files/:extension
   @Get(':extension')
-  findByExtension(@Param("extension") _extension: string) {
-  }
-
+  findByExtension(@Param('extension') _extension: string) { }
 
   // POST /files
   @UseInterceptors(
-    FileInterceptor('file', { // FileInterceptor('file') handles the multipart field
+    FileInterceptor('file', {
+      // FileInterceptor('file') handles the multipart field
       storage: diskStorage({
         destination: './uploads',
 
@@ -67,36 +66,38 @@ export class FilesController {
           const filename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${extension}`;
 
           cb(null, filename);
-        }
-      })
-    })
+        },
+      }),
+    }),
   )
   @Post()
   // ! TODO: refactor, maybe change the order so the temporary DB storing is not needed (?)
   // ! maybe add some state in schema: incomplete, complete (?)
   // !  see where will this fail later.
-  async upload(@UploadedFile('file') file: Express.Multer.File) { // and @UploadedFile() retrieves the resulting file object
+  async upload(@UploadedFile('file') file: Express.Multer.File) {
+    // and @UploadedFile() retrieves the resulting file object
     // temporarily store the file and see if there's any duplicate
     const fileId = await this.fileService.upload(file.originalname, file.path);
     try {
       // before proceeding to hash, make sure the file is saved in the disk
       // the file could theoretically disappear between Multer finishing and your hashing operation.
-      await access(file.path, constants.F_OK)
+      await access(file.path, constants.F_OK);
 
       // after the file upload is complete, compute hash and check if it already exists
-      const newFileHash = await this.hashService.getSHA256(file.path)
+      const newFileHash = await this.hashService
+        .getSHA256(file.path)
         .catch(async (error) => {
           // hashing failes
-          console.log(error)
+          console.log(error);
           await this.fileService.deleteFromDisks(file.path);
           await this.fileService.delete(fileId);
-          throw new HttpException('Hashing failed.', HttpStatus.BAD_REQUEST)
-        })
+          throw new HttpException('Hashing failed.', HttpStatus.BAD_REQUEST);
+        });
 
       const exists = await this.hashService.getDuplicates(newFileHash);
 
       console.log('-- exists: ', exists.length);
-      console.log(exists)
+      console.log(exists);
       // reject duplicates
       if (exists.length > 0) {
         const existedFile = exists[0];
@@ -106,25 +107,28 @@ export class FilesController {
         // delete record from dn
         await this.fileService.delete(fileId);
         // send error
-        throw new HttpException('File already exists, duplicates are not supported.', HttpStatus.CONFLICT)
+        throw new HttpException(
+          'File already exists, duplicates are not supported.',
+          HttpStatus.CONFLICT,
+        );
       }
       // save the hash
       await this.fileService.saveHash(fileId, newFileHash);
 
       // get and save category
       const category = await this.categoryService.store(fileId, file.path);
-      console.log('file category -- ' + category)
+      console.log('file category --', category);
 
       // if theyre arent duplicates then store the file.
       return {
         message: 'Upload successfull.',
-        filepath: file.path
-      }
+        filepath: file.path,
+      };
     } catch (error: any) {
       // ! TODO: confirm this is working.
-      console.log(error)
-      // means the `access()` failed, which again means the file is not found from the disk 
-      if (error.code == 'ENOENT') {
+      console.log(error);
+      // means the `access()` failed, which again means the file is not found from the disk
+      if (error instanceof Error && 'code' in error && error.code == 'ENOENT') {
         throw new HttpException('File not found.', HttpStatus.NOT_FOUND);
       }
       throw error;
@@ -162,7 +166,7 @@ export class FilesController {
   async storeHash(@Param('id') id: number) {
     const file = await this.findOne(id);
     const hash = await this.hashService.getSHA256(file.path);
-    await this.fileService.saveHash(id, hash as string);
+    await this.fileService.saveHash(id, hash);
     return {
       message: 'Hash successfull.',
       hash,
@@ -174,8 +178,9 @@ export class FilesController {
   @Post(':id/category/override')
   async categoryOverride(
     @Body() categoryOverrideDto: CategoryOverrideDto,
-    @Param('id') id: number) {
-    console.log(categoryOverrideDto)
+    @Param('id') id: number,
+  ) {
+    console.log(categoryOverrideDto);
     return await this.categoryService.update(id, categoryOverrideDto.category);
   }
 }

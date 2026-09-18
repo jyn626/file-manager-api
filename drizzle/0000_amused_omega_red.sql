@@ -12,6 +12,7 @@ CREATE TABLE `Files` (
 	`name` text NOT NULL,
 	`path` text NOT NULL,
 	`sha` text,
+	`extension` text,
 	`category` text DEFAULT 'Others'
 );
 --> statement-breakpoint

@@ -5,6 +5,7 @@ export class GetFilesQueryDto {
   minSize?: number;
   maxSize?: number;
   sortBy?: string;
+  extension?: string;
   sortOrder?: string;
   limit?: number;
   offset?: number;
