@@ -31,3 +31,9 @@ export const filesRelations = relations(files, ({ one }) => ({
     references: [fileMetadatas.fileId],
   }),
 }));
+
+export const users = sqliteTable('Users', {
+  id: integer().primaryKey({ autoIncrement: true }),
+  username: text('username').notNull().unique(),
+  password: text('password').notNull(),
+});
