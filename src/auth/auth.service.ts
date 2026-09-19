@@ -3,14 +3,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import bcrypt from 'bcrypt';
 import { db } from 'src/db';
-import { files, users } from 'src/db/schema';
+import { users } from 'src/db/schema';
+import { SignUpDto } from './dtos/sign-up.dto';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UsersService) { }
 
   // TODO: create a dto and validation
-  async signUp(username: string, password: string) {
+  async signUp({ username, password }: SignUpDto) {
     const exists = await this.userService.findOne(username);
 
     if (exists) {
@@ -24,5 +25,10 @@ export class AuthService {
       username,
       password: hash,
     });
+
+    return {
+      message: 'User registered successfully.',
+      username,
+    };
   }
 }

@@ -1,11 +1,11 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class FileCreateDto {
+export class SignUpDto {
   @IsString()
   @IsNotEmpty()
-  name!: string;
+  username!: string;
 
   @IsString()
   @IsNotEmpty()
-  path!: string;
+  password!: string;
 }

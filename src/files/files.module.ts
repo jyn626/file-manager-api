@@ -11,7 +11,7 @@ import { CategorizeService } from 'src/categorize/categorize.service';
     FilesService,
     FileMetadataService,
     HashService,
-    CategorizeService
-  ]
+    CategorizeService,
+  ],
 })
 export class FilesModule { }
