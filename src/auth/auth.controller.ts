@@ -7,11 +7,11 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(
     private readonly userService: UsersService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) { }
 
   @Post()
   async signUp(@Body() signUpDto: SignUpDto) {
-    return await this.
+    return await this.authService.signUp(signUpDto);
   }
 }
